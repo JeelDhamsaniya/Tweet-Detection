@@ -1,74 +1,105 @@
-Toxic Tweet Detection Tool
+# Toxic Tweet Detection Tool
 
-This is a standalone JavaFX application for detecting toxic tweets, finding similar tweets, and analyzing user propagation graphs without using any machine learning libraries or build tools like Maven.
+A standalone **JavaFX** application for detecting toxic tweets, finding similar tweets, and analyzing user propagation graphs without using any machine learning libraries or build tools like Maven.
 
-Project Structure
+---
 
-All necessary files are located in a single directory:
+## Features
 
-Main.java: The main application class with the JavaFX GUI.
+- **Toxic Word Detection:** Detects toxic words in tweets using the Rabin-Karp string matching algorithm.
+- **Similar Tweet Detection:** Finds similar tweets based on hash similarity.
+- **User Graph Analysis:** Analyzes propagation and relationships of users using graph traversal (DFS).
+- **Simple and Lightweight:** No ML libraries or Maven/Gradle build tools required.
 
-Tweet.java: Data model for a tweet.
+---
 
-User.java: Data model for a user (graph node).
+## Project Structure
 
-RabinKarp.java: Algorithm for toxic word detection.
+All files are located in a single directory:
 
-HashSimilarity.java: Algorithm for finding similar tweets.
+- `Main.java` – Main JavaFX application class.
+- `Tweet.java` – Data model for a tweet.
+- `User.java` – Data model for a user (graph node).
+- `RabinKarp.java` – Algorithm for toxic word detection.
+- `HashSimilarity.java` – Algorithm for finding similar tweets.
+- `GraphAnalyzer.java` – Algorithm for user graph analysis (DFS).
+- `toxic_words.txt` – List of toxic words.
+- `tweets.csv` – Sample tweet data for testing.
 
-GraphAnalyzer.java: Algorithm for user graph analysis (DFS).
+---
 
-toxic_words.txt: A simple text file containing a list of toxic words.
+## Prerequisites
 
-tweets.csv: Sample tweet data for testing.
+- **Java Development Kit (JDK) 11** or higher.
+- **JavaFX SDK**. Ensure your environment is configured to use JavaFX.
 
-Prerequisites
+---
 
-Java Development Kit (JDK) 11 or higher.
+## How to Compile and Run
 
-JavaFX SDK. Make sure your environment is configured to use JavaFX.
+### Step 1: Navigate to the Project Directory
 
-How to Compile and Run
+Open a terminal or command prompt and navigate to the folder containing all `.java` and `.txt` files:
 
-Follow these steps from your terminal or command prompt.
-
-Step 1: Navigate to the Project Directory
-
-Open your terminal and change the directory to where you have saved all the .java and .txt files.
-
+```bash
 cd path/to/your/project/folder
+```
+### Step 2 :  Set the Path to JavaFX
 
+Specify the path to the JavaFX SDK lib folder:
 
-Step 2: Set the Path to JavaFX
-
-You need to tell the Java compiler and runtime where to find the JavaFX library files. Replace path/to/your/javafx-sdk/lib with the actual path to the lib folder of your JavaFX SDK installation.
-
-For Windows (Command Prompt):
-
+Windows (Command Prompt):
+```bash
 set JFX_PATH="C:\path\to\your\javafx-sdk-xx\lib"
+```
 
+macOS/Linux:
 
-For macOS/Linux:
-
+```bash
 export JFX_PATH=/path/to/your/javafx-sdk-xx/lib
+```
 
+### Step 3 :  Compile the Java Files
 
-Step 3: Compile the Java Files
+Compile all .java files while specifying the module path and required JavaFX modules:
 
-Compile all .java files. You need to specify the module path and the modules required for JavaFX.
-
+Windows:
+```bash
 javac --module-path %JFX_PATH% --add-modules javafx.controls,javafx.fxml *.java
+```
 
 
-Note: On macOS/Linux, use $JFX_PATH instead of %JFX_PATH%.
+macOS/Linux:
 
-Step 4: Run the Application
+```bash
+javac --module-path $JFX_PATH --add-modules javafx.controls,javafx.fxml *.java
+```
+### Step 4: Run the Application
 
-Run the main class. Again, you need to provide the module path and add the required modules.
+Run the main class:
 
+Windows:
+```bash
 java --module-path %JFX_PATH% --add-modules javafx.controls,javafx.fxml Main
+```
 
 
-Note: On macOS/Linux, use $JFX_PATH instead of %JFX_PATH%.
+macOS/Linux:
 
-The application window should now appear. You can load the provided tweets.csv file or your own data to begin the analysis.
+```bash
+java --module-path $JFX_PATH --add-modules javafx.controls,javafx.fxml Main
+```
+
+### Usage
+
+- Launch the application.
+
+- Load the provided tweets.csv file or your own tweet dataset.
+
+- Detect toxic tweets and find similar tweets.
+
+- Analyze the user propagation graph.
+
+### License
+
+This project is open for educational purposes and personal use.
