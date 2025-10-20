@@ -96,13 +96,15 @@ public class Main extends Application {
     private void setupTweetTable() {
         TableColumn<Tweet, String> idCol = new TableColumn<>("Tweet ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("tweetId"));
+        idCol.setPrefWidth(100);
 
         TableColumn<Tweet, String> userCol = new TableColumn<>("User ID");
         userCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        userCol.setPrefWidth(100);
 
         TableColumn<Tweet, String> textCol = new TableColumn<>("Tweet Text");
         textCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOriginalText()));
-        textCol.setPrefWidth(450);
+        textCol.setPrefWidth(500);
 
         // Custom cell factory to highlight toxic words
         textCol.setCellFactory(column -> new TableCell<>() {
@@ -110,32 +112,48 @@ public class Main extends Application {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item == null || empty) {
+                    setText(null);
                     setGraphic(null);
+                    setStyle("");
                 } else {
                     Tweet tweet = getTableView().getItems().get(getIndex());
+
+                    // Print tweet text to terminal
+                    System.out.println("Tweet ID: " + tweet.getTweetId() + " | User: " + tweet.getUserId());
+                    System.out.println("Text: " + item);
+                    System.out.println("Toxic: " + tweet.isToxic());
                     if (tweet.isToxic()) {
-                        TextFlow textFlow = new TextFlow();
-                        String[] words = item.split("(?<=\\s)|(?=\\s)");
-                        for(String word : words) {
-                            Text textNode = new Text(word);
-                            // Simple check if the word is toxic (case-insensitive)
-                            if (tweet.getToxicWords().stream().anyMatch(toxicWord -> word.toLowerCase().contains(toxicWord))) {
-                                textNode.setFill(Color.RED);
-                                textNode.setFont(Font.font("System", FontWeight.BOLD, 12));
-                            }
-                            textFlow.getChildren().add(textNode);
-                        }
-                        setGraphic(textFlow);
-                    } else {
-                        setGraphic(new Text(item));
+                        System.out.println("Toxic Words: " + tweet.getToxicWords());
                     }
+                    System.out.println("---");
+
+                    TextFlow textFlow = new TextFlow();
+                    textFlow.setPadding(new Insets(2, 5, 2, 5));
+                    textFlow.setLineSpacing(1);
+
+                    String[] words = item.split("(?<=\\s)|(?=\\s)");
+                    for(String word : words) {
+                        Text textNode = new Text(word);
+                        textNode.setFont(Font.font("System", 12));
+
+                        // Highlight toxic words in red if tweet is toxic
+                        if (tweet.isToxic() && tweet.getToxicWords().stream()
+                                .anyMatch(toxicWord -> word.toLowerCase().contains(toxicWord))) {
+                            textNode.setFill(Color.RED);
+                            textNode.setFont(Font.font("System", FontWeight.BOLD, 12));
+                        }
+                        textFlow.getChildren().add(textNode);
+                    }
+                    setText(null);
+                    setGraphic(textFlow);
+                    setStyle("-fx-padding: 2; -fx-cell-size: 30;");
                 }
             }
         });
 
-
         TableColumn<Tweet, Boolean> toxicCol = new TableColumn<>("Is Toxic?");
         toxicCol.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().isToxic()));
+        toxicCol.setPrefWidth(100);
         toxicCol.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Boolean item, boolean empty) {
@@ -145,6 +163,7 @@ public class Main extends Application {
                     setStyle("");
                 } else {
                     setText(item ? "Yes" : "No");
+                    setStyle("-fx-padding: 2; -fx-alignment: CENTER;");
                     if (item) {
                         setTextFill(Color.RED);
                         setFont(Font.font("System", FontWeight.BOLD, 12));
@@ -158,8 +177,9 @@ public class Main extends Application {
 
         tweetTable.getColumns().addAll(idCol, userCol, textCol, toxicCol);
         tweetTable.setItems(tweets);
+        tweetTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tweetTable.setFixedCellSize(35); // Set compact fixed cell height
     }
-
     /**
      * Loads the list of toxic words from toxic_words.txt.
      */
