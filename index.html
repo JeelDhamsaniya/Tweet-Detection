@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toxic Tweet Detection - Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1e293b;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 5px;
+      }
+
+      /* Main container with glass effect */
+      .glass-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      }
+
+      /* Enhanced prose styles */
+      .prose h1 {
+        font-size: 2.75rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .prose h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid #667eea;
+        color: #1e293b;
+        position: relative;
+      }
+
+      .prose h2::before {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: #764ba2;
+      }
+
+      .prose h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #334155;
+      }
+
+      .prose p {
+        line-height: 1.8;
+        font-size: 1.05rem;
+        color: #475569;
+        margin-bottom: 1rem;
+      }
+
+      .prose ul,
+      .prose ol {
+        line-height: 1.8;
+      }
+
+      .prose li {
+        margin-top: 0.75rem;
+        color: #475569;
+      }
+
+      .prose a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border-bottom: 2px solid transparent;
+      }
+
+      .prose a:hover {
+        color: #764ba2;
+        border-bottom-color: #764ba2;
+      }
+
+      /* Enhanced code blocks */
+      .prose pre {
+        position: relative;
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        color: #e2e8f0;
+        padding: 1.5rem;
+        padding-top: 3rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .prose code {
+        font-family: "Fira Code", "Courier New", monospace;
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
+      .prose pre code {
+        background: transparent;
+        color: #e2e8f0;
+        padding: 0;
+      }
+
+      /* Numbered steps enhancement */
+      .prose ol {
+        counter-reset: steps-counter;
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .prose ol > li {
+        position: relative;
+        counter-increment: steps-counter;
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.05) 0%,
+          rgba(118, 75, 162, 0.05) 100%
+        );
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        padding-left: 4rem;
+        margin-top: 1.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .prose ol > li:hover {
+        border-color: #667eea;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .prose ol > li::before {
+        content: counter(steps-counter);
+        position: absolute;
+        left: 1.5rem;
+        top: 1.5rem;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: white;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+      }
+
+      .prose ol > li ul {
+        list-style: disc;
+        padding-left: 1.5rem;
+        margin-top: 1rem;
+      }
+
+      .prose ol > li ul li {
+        background: transparent;
+        border: none;
+        padding: 0;
+        margin-top: 0.5rem;
+      }
+
+      .prose ol > li ul li::before {
+        display: none;
+      }
+
+      /* Enhanced copy button */
+      .copy-btn {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .copy-btn.copied {
+        background: rgba(16, 185, 129, 0.9);
+        color: white;
+        border-color: rgba(16, 185, 129, 1);
+      }
+
+      /* Table of contents enhancement */
+      #table-of-contents ul {
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.05) 0%,
+          rgba(118, 75, 162, 0.05) 100%
+        );
+        border-left: 4px solid #667eea;
+        padding: 1.5rem 1.5rem 1.5rem 2rem;
+        border-radius: 0.5rem;
+      }
+
+      /* Logo container */
+      .logo-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      /* Section cards */
+      section {
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      section:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .prose h1 {
+          font-size: 2rem;
+        }
+        .prose h2 {
+          font-size: 1.5rem;
+        }
+        .prose h3 {
+          font-size: 1.25rem;
+        }
+      }
+
+      /* Print styles */
+      @media print {
+        body {
+          background: white;
+        }
+        .copy-btn {
+          display: none;
+        }
+        section {
+          box-shadow: none;
+          page-break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="main-content" class="p-4 md:p-10 max-w-7xl mx-auto my-8">
+      <div class="glass-container rounded-2xl p-8 md:p-12">
+        <div class="prose max-w-none">
+          <!-- Introduction -->
+          <section id="introduction">
+            <h1>Toxic Tweet Detection Tool</h1>
+            <p class="text-xl text-gray-600 font-medium">
+              A JavaFX application for content analysis and user graph
+              visualization.
+            </p>
+
+            <p>
+              Welcome to the documentation for the Toxic Tweet Detection Tool.
+              This project is a standalone Java desktop application built with
+              JavaFX. Its primary goal is to provide a tool for analyzing tweet
+              data for toxic content, identifying duplicate or similar tweets,
+              and visualizing how toxic content propagates through a user
+              network.
+            </p>
+            <p>
+              This tool is built using pure Java algorithms without relying on
+              external machine learning libraries or build tools like Maven,
+              making it a lightweight and self-contained solution for
+              algorithmic analysis.
+            </p>
+
+            <div class="my-10 flex justify-center">
+              <div
+                class="logo-container w-56 h-56 rounded-full flex items-center justify-center border-4 border-white shadow-2xl"
+              >
+                <span
+                  data-lucide="shield-alert"
+                  class="w-28 h-28 text-white"
+                ></span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Creator Info -->
+          <!-- <section id="creator" class="text-center">
+            <h2>Project Creator</h2>
+
+            <div
+              class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-8 shadow-lg border-2 border-purple-200 max-w-2xl mx-auto"
+            >
+              <div class="space-y-6">
+                <div class="text-center">Name</p>
+                  <p class="text-3xl font-bold text-gray-800">[Roll number]</p>
+                </div>
+                
+                <div class="border-t-2 border-purple-200 my-6"></div>
+                <div class="text-center">
+                  <p class="text-gray-600 text-lg font-semibold mb-2">Name</p>
+                  <p class="text-3xl font-bold text-gray-800">[Roll number]</p>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <p class="text-gray-600 text-lg italic">
+                "This project was developed as part of the Design and Analysis of Algorithms course."
+              </p>
+            </div>
+          </section> -->
+
+          <!-- Table of Contents -->
+          <section id="table-of-contents">
+            <h2>Table of Contents</h2>
+            <ul class="list-none pl-0 space-y-2">
+              <li><a href="#introduction">→ Introduction</a></li>
+              <li><a href="#overview">→ Overview</a></li>
+              <li><a href="#installation">→ Installation</a></li>
+              <li><a href="#usage">→ Usage Guide</a></li>
+              <li><a href="#code-structure">→ Code Structure</a></li>
+              <li><a href="#features">→ Features & Functionality</a></li>
+              <li><a href="#ui-design">→ UI Design</a></li>
+              <li><a href="#testing">→ Testing</a></li>
+              <li><a href="#contributing">→ Contributing</a></li>
+              <li><a href="#license">→ License</a></li>
+            </ul>
+          </section>
+
+          <!-- Overview -->
+          <section id="overview">
+            <h2>Overview</h2>
+            <p>
+              The Toxic Tweet Detection tool loads a collection of tweets from a
+              simple <code>.csv</code> or <code>.txt</code> file. Once loaded,
+              it performs a three-part analysis and presents the findings in a
+              clean, interactive user interface.
+            </p>
+
+            <h3>Key Features</h3>
+            <ul>
+              <li>
+                <strong>Toxic Word Detection:</strong> Uses the Rabin-Karp
+                string hashing algorithm to efficiently scan tweets for a
+                predefined list of toxic words.
+              </li>
+              <li>
+                <strong>Tweet Similarity Analysis:</strong> Employs a hash-based
+                algorithm (Jaccard similarity on character sets) to find and
+                group tweets that are nearly identical.
+              </li>
+              <li>
+                <strong>User Propagation Graphing:</strong> Builds a directed
+                graph of users based on retweet (RT) data. It then uses
+                Depth-First Search (DFS) to identify clusters of users who are
+                spreading toxic content.
+              </li>
+              <li>
+                <strong>Interactive UI:</strong> A simple JavaFX interface
+                featuring a master table of all tweets, with highlighting for
+                toxic content and a dedicated area for analysis results.
+              </li>
+            </ul>
+          </section>
+
+          <!-- Installation -->
+          <section id="installation">
+            <h2>Installation Instructions</h2>
+            <p>
+              This project is designed to run in an IDE like IntelliJ IDEA
+              without Maven. You must have the JavaFX SDK configured manually.
+            </p>
+
+            <h3>Prerequisites</h3>
+            <ul>
+              <li>
+                <strong>Java Development Kit (JDK):</strong> Version 11 or
+                higher.
+              </li>
+              <li>
+                <strong>JavaFX SDK:</strong> A matching version for your JDK
+                (e.g., JavaFX 21 for JDK 21). You can download it from
+                <a href="https://gluonhq.com/products/javafx/" target="_blank"
+                  >GluonHQ</a
+                >.
+              </li>
+            </ul>
+
+            <h3>Setup Guide (IntelliJ IDEA)</h3>
+            <ol>
+              <li>
+                <strong>Download the JavaFX SDK:</strong> Download the SDK from
+                GluonHQ and extract the <code>.zip</code> file to a permanent
+                location (e.g., <code>C:\dev\javafx-sdk-21</code>).
+              </li>
+              <li>
+                <strong>Create a New Java Project:</strong> In IntelliJ, create
+                a new, empty Java project (not a JavaFX project).
+              </li>
+              <li>
+                <strong>Add Source Files:</strong> Copy all <code>.java</code>,
+                <code>.txt</code>, and <code>.csv</code> files from this project
+                into your project's <code>src</code> directory (or the root
+                folder for data files).
+              </li>
+              <li>
+                <strong>Configure Project Library:</strong>
+                <ul>
+                  <li>
+                    Go to
+                    <strong>File > Project Structure... > Libraries</strong>.
+                  </li>
+                  <li>
+                    Click the <strong>+</strong> button and select
+                    <strong>Java</strong>.
+                  </li>
+                  <li>
+                    Navigate to your extracted JavaFX SDK folder and select the
+                    <code>lib</code> directory.
+                  </li>
+                  <li>
+                    Click <strong>OK</strong> to add it as a project library.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>Set VM Run Options:</strong>
+                <ul>
+                  <li>Go to <strong>Run > Edit Configurations...</strong>.</li>
+                  <li>
+                    Click <strong>+</strong> and select
+                    <strong>Application</strong>.
+                  </li>
+                  <li>
+                    Set the <strong>Main class</strong> to <code>Main</code> (or
+                    <code>com.example.toxictweet.Main</code> if you used a
+                    package).
+                  </li>
+                  <li>
+                    Click <strong>Modify options</strong> and select
+                    <strong>Add VM options</strong>.
+                  </li>
+                  <li>
+                    In the <strong>VM options</strong> box, add the following,
+                    replacing the path with your own:
+                    <pre><code>--module-path "C:\dev\javafx-sdk-21\lib" --add-modules javafx.controls,javafx.fxml</code></pre>
+                  </li>
+                  <li>Click <strong>OK</strong> to save.</li>
+                </ul>
+              </li>
+            </ol>
+
+            <h3>Compile and Run (Command Line)</h3>
+            <ol>
+              <li>
+                Set the path to your JavaFX SDK <code>lib</code> folder:
+                <pre><code># Windows
+set JFX_PATH="C:\dev\javafx-sdk-21\lib"
+
+# macOS/Linux
+export JFX_PATH=/dev/javafx-sdk-21/lib</code></pre>
+              </li>
+              <li>
+                Compile all Java files:
+                <pre><code># Windows
+javac --module-path %JFX_PATH% --add-modules javafx.controls,javafx.fxml *.java
+
+# macOS/Linux
+javac --module-path $JFX_PATH --add-modules javafx.controls,javafx.fxml *.java</code></pre>
+              </li>
+              <li>
+                Run the main application:
+                <pre><code># Windows
+java --module-path %JFX_PATH% --add-modules javafx.controls,javafx.fxml Main
+
+# macOS/Linux
+java --module-path $JFX_PATH --add-modules javafx.controls,javafx.fxml Main</code></pre>
+              </li>
+            </ol>
+          </section>
+
+          <!-- Usage -->
+          <section id="usage">
+            <h2>Usage Guide</h2>
+            <p>Once the application is running, usage is straightforward.</p>
+            <ol>
+              <li>
+                <strong>Load Tweets:</strong> Click the "Load Tweets (CSV/TXT)"
+                button. A file chooser will appear. Select the
+                <code>tweets.csv</code> file or another compatible file.
+              </li>
+              <li>
+                <strong>Run Analysis:</strong> Click the "Run Full Analysis"
+                button. The application will process all loaded tweets.
+              </li>
+              <li>
+                <strong>Review Results:</strong>
+                <ul>
+                  <li>
+                    The main table will update. Toxic tweets will be marked
+                    "Yes" and the offending words highlighted in red.
+                  </li>
+                  <li>
+                    The "Analysis Results" text area at the bottom will populate
+                    with two reports: a list of similar tweet groups and a list
+                    of toxic user clusters.
+                  </li>
+                </ul>
+              </li>
+            </ol>
+          </section>
+
+          <!-- Code Structure -->
+          <section id="code-structure">
+            <h2>Code Structure</h2>
+            <p>
+              The project is contained in a flat directory for simplicity. All
+              logic is encapsulated in distinct classes.
+            </p>
+            <pre><code>/ToxicTweetDetection/
+├── Main.java             (JavaFX App, UI, Main Logic)
+├── Tweet.java            (Data Model for a tweet)
+├── User.java             (Data Model for a graph node)
+├── RabinKarp.java        (Algorithm: Toxic Detection)
+├── HashSimilarity.java   (Algorithm: Similarity)
+├── GraphAnalyzer.java    (Algorithm: Graph Analysis)
+├── toxic_words.txt       (Config: List of toxic words)
+└── tweets.csv            (Data: Sample tweets)
+</code></pre>
+            <h3>Key Components</h3>
+            <ul>
+              <li>
+                <code>Main.java</code>: The entry point for the JavaFX
+                application. It builds the UI, sets up event handlers (button
+                clicks, file loading), and orchestrates the calls to the various
+                analysis classes.
+              </li>
+              <li>
+                <code>Tweet.java</code>: A simple POJO (Plain Old Java Object)
+                that stores data for a single tweet, including its ID, user,
+                text, and toxicity status.
+              </li>
+              <li>
+                <code>User.java</code>: Represents a node in the user graph. It
+                stores the <code>userId</code> and a <code>Set</code> of
+                connections (users this user has retweeted).
+              </li>
+              <li>
+                <code>RabinKarp.java</code>: An implementation of the Rabin-Karp
+                algorithm. It is initialized with the list of toxic words and
+                can efficiently <code>search()</code> a new string (a tweet) for
+                any matches.
+              </li>
+              <li>
+                <code>HashSimilarity.java</code>: Calculates similarity between
+                tweets. It preprocesses text, converts it into a
+                <code>Set</code> of characters, and then uses the Jaccard
+                similarity index to compare two sets.
+              </li>
+              <li>
+                <code>GraphAnalyzer.java</code>: Builds and analyzes the user
+                graph. It takes the <code>Map</code> of all users and uses
+                Depth-First Search (DFS) to find all connected components
+                (clusters) that contain at least one toxic tweeter.
+              </li>
+            </ul>
+          </section>
+
+          <!-- Features -->
+          <section id="features">
+            <h2>Features & Functionality</h2>
+            <h3>Toxic Detection (Rabin-Karp)</h3>
+            <p>
+              The <code>RabinKarp.java</code> class implements a rolling hash
+              algorithm. It pre-computes the hash value for every word in
+              <code>toxic_words.txt</code>. When a tweet is analyzed, it slides
+              a window (the length of a given toxic word) across the tweet text,
+              calculating the hash of the current text segment in O(1) time. If
+              the segment's hash matches a toxic word's hash, it performs a
+              final character-by-character check to confirm the match, avoiding
+              hash collisions.
+            </p>
+
+            <h3>Similarity Detection (Hash Sets)</h3>
+            <p>
+              The <code>HashSimilarity.java</code> class finds near-duplicates.
+              It ignores case and punctuation. For two tweets, it generates a
+              <code>Set</code> of unique characters for each. The similarity is
+              then calculated using the Jaccard Index:
+            </p>
+            <p>
+              <code>Similarity = (Size of Intersection) / (Size of Union)</code>
+            </p>
+            <p>
+              Any pair of tweets with a similarity score above the 70% threshold
+              is grouped together.
+            </p>
+
+            <h3>User Propagation Graph (DFS)</h3>
+            <p>
+              The <code>GraphAnalyzer.java</code> class finds toxic user
+              clusters.
+            </p>
+            <ol>
+              <li>
+                <strong>Graph Building:</strong> A
+                <code>Map&lt;String, User&gt;</code> is built. When a retweet
+                (e.g., <code>RT@userA</code>) is found, a directed edge is added
+                from the retweeter to <code>userA</code>.
+              </li>
+              <li>
+                <strong>Cluster Finding:</strong> The algorithm performs a DFS
+                starting from every user who has posted a toxic tweet. The DFS
+                explores the graph, and all users visited in a single search
+                form a "cluster" of users connected to that toxic tweet. A
+                <code>Set</code> of visited users ensures each user is only
+                added to one cluster.
+              </li>
+            </ol>
+          </section>
+
+          <!-- UI Design -->
+          <section id="ui-design">
+            <h2>UI Design</h2>
+            <p>
+              The user interface is built using standard, pure JavaFX components
+              with a clean and functional layout.
+            </p>
+            <ul>
+              <li>
+                <strong>Layout:</strong> The root is a <code>BorderPane</code>,
+                which provides a clean structure for the top controls, center
+                table, and bottom results area. VBox and HBox containers are
+                used for spacing and alignment.
+              </li>
+              <li>
+                <strong>Controls:</strong> Standard
+                <code>Button</code> components trigger file loading and
+                analysis. A <code>Label</code> provides the title, and a
+                <code>TextArea</code> (set to non-editable) displays results.
+              </li>
+              <li>
+                <strong><code>TableView</code>:</strong> This is the central UI
+                component. It is bound to an
+                <code>ObservableList&lt;Tweet&gt;</code>, so it updates
+                automatically when the data changes.
+              </li>
+              <li>
+                <strong>Custom <code>CellFactory</code>:</strong> The "Tweet
+                Text" column uses a custom cell factory. This allows for
+                advanced rendering:
+                <ul>
+                  <li>
+                    If a tweet is toxic, it uses a <code>TextFlow</code> node.
+                    This node can contain multiple <code>Text</code> objects,
+                    allowing us to style toxic words (bold, red) differently
+                    from the rest of the text.
+                  </li>
+                  <li>
+                    If a tweet is not toxic, it uses a simple
+                    <code>Text</code> node with wrapping enabled, ensuring long
+                    tweets are fully readable.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+
+          <!-- Testing -->
+          <section id="testing">
+            <h2>Testing</h2>
+            <p>
+              This project does not currently include a formal unit testing
+              suite (e.g., JUnit). Testing is performed manually by loading and
+              analyzing the provided <code>tweets.csv</code> file.
+            </p>
+
+            <h3>Manual Test Cases:</h3>
+            <ul>
+              <li>
+                Load <code>tweets.csv</code> and verify all tweets appear in the
+                table.
+              </li>
+              <li>
+                Run analysis and confirm that tweets 102, 104, 105, and 106 are
+                marked as toxic.
+              </li>
+              <li>
+                Confirm that the words "hate," "stupid," "dumb," "idiot," etc.,
+                are highlighted in red in the table.
+              </li>
+              <li>
+                Check the "Analysis Results" area for the "Similar/Duplicate
+                Tweet Groups" report. Verify that tweets 102, 105, and 106 are
+                grouped together.
+              </li>
+              <li>
+                Check the "Toxic User Propagation Clusters" report. Verify that
+                <code>userB</code>, <code>userD</code>, <code>userE</code>,
+                <code>userF</code>, and <code>userH</code> are identified in
+                clusters.
+              </li>
+            </ul>
+          </section>
+
+          <!-- Contributing -->
+          <section id="contributing">
+            <h2>Contributing</h2>
+            <p>
+              Contributions are welcome. If you would like to improve the tool,
+              please follow these guidelines.
+            </p>
+            <ol>
+              <li>
+                <strong>Fork the Repository:</strong> Start by forking the main
+                project repository.
+              </li>
+              <li>
+                <strong>Create a Branch:</strong> Create a new branch for your
+                feature or bugfix (e.g., <code>feature/add-junit-tests</code>).
+              </li>
+              <li>
+                <strong>Make Changes:</strong> Implement your changes and
+                additions.
+              </li>
+              <li>
+                <strong>Submit a Pull Request:</strong> Push your branch to your
+                fork and submit a pull request to the main repository,
+                describing the changes you have made.
+              </li>
+            </ol>
+            <h3>Reporting Bugs</h3>
+            <p>
+              Please report any bugs or issues by opening a new "Issue" in the
+              project's GitHub repository. Provide a detailed description of the
+              bug, the steps to reproduce it, and your environment (OS, Java
+              version).
+            </p>
+          </section>
+
+          <!-- License -->
+          <section id="license">
+            <h2>License & Acknowledgments</h2>
+            <h3>License</h3>
+            <p>
+              This project is licensed under the <strong>MIT License</strong>. A
+              copy of the license is included in the repository. You are free to
+              modify, distribute, and use this code for personal or commercial
+              projects.
+            </p>
+
+            <h3>Acknowledgments</h3>
+            <ul>
+              <li><strong>JavaFX:</strong> For the modern UI toolkit.</li>
+              <li>
+                <strong>Lucide Icons:</strong> For the clean, open-source icons
+                used in this documentation.
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      lucide.createIcons();
+
+      function addCopyButtons() {
+        const codeBlocks = document.querySelectorAll(".prose pre");
+
+        codeBlocks.forEach((block) => {
+          const codeElement = block.querySelector("code");
+          if (!codeElement) return;
+
+          const textToCopy = codeElement.innerText;
+          const copyButton = document.createElement("button");
+          copyButton.classList.add("copy-btn");
+          copyButton.innerText = "Copy";
+
+          copyButton.addEventListener("click", () => {
+            const textarea = document.createElement("textarea");
+            textarea.value = textToCopy;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = 0;
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            try {
+              document.execCommand("copy");
+              copyButton.innerText = "Copied!";
+              copyButton.classList.add("copied");
+            } catch (err) {
+              console.error("Failed to copy text: ", err);
+              copyButton.innerText = "Error";
+            }
+
+            document.body.removeChild(textarea);
+
+            setTimeout(() => {
+              copyButton.innerText = "Copy";
+              copyButton.classList.remove("copied");
+            }, 2000);
+          });
+
+          block.appendChild(copyButton);
+        });
+      }
+
+      addCopyButtons();
+    </script>
+  </body>
+</html>
