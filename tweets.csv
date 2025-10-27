@@ -1,10 +1,100 @@
-201,user_1,This is a fantastic product, I love it!
-202,user_2,What a pathetic attempt. This is useless.
-203,user_3,I hate waiting in line, it's the worst.
+201,user_1,This is a fantastic product, I love it!,
+202,user_2,What a pathetic attempt. This is useless.,
+203,user_3,I hate waiting in line, it's the worst.,
 204,user_4,Such a stupid idiot, can't believe they did that.,RT@user_2
 205,user_5,This product is completely useless, what a pathetic design.,RT@user_2
-206,user_6,Spreading positivity today!
-207,user_8,The weather is so nice.
-208,user_9,That movie was awful and dumb.
-209,user_10,I agree with @user_9, that film was just terrible.,RT@user_9
-210,user_11,Kill them with kindness.
+206,user_6,Totally agree this is trash.,RT@user_2
+207,user_7,Yeah such a pathetic failure.,RT@user_2
+208,user_8,Can't believe how useless this is.,RT@user_2
+209,user_9,Complete waste of time and money.,RT@user_2
+210,user_10,So true absolutely terrible.,RT@user_2
+211,user_11,Just finished my workout feeling amazing!,
+212,user_12,You're such a dumb loser honestly.,
+213,user_13,Can't stand idiots like this.,RT@user_12
+214,user_14,Seriously what a moron.,RT@user_12
+215,user_15,Agreed total loser behavior.,RT@user_12
+216,user_16,Yeah such a dumb person.,RT@user_12
+217,user_17,People like this are the worst.,RT@user_12
+218,user_18,Absolutely pathetic loser.,RT@user_12
+219,user_19,So ignorant and stupid.,RT@user_12
+220,user_20,Can't believe people are this dumb.,RT@user_12
+221,user_21,Loving this new album release!,
+222,user_22,This app is completely useless garbage.,
+223,user_23,Total waste of time.,RT@user_22
+224,user_24,Yeah this app is trash.,RT@user_22
+225,user_25,Completely useless design.,RT@user_22
+226,user_26,Garbage app not worth it.,RT@user_22
+227,user_27,So true absolute trash.,RT@user_22
+228,user_28,Agreed completely useless.,RT@user_22
+229,user_29,Finally weekend is here!,
+230,user_30,Just adopted a cute puppy today.,
+231,user_31,That's so sweet congrats!,RT@user_30
+232,user_32,Adorable puppy enjoy!,RT@user_30
+233,user_33,What an idiot move by the ref.,
+234,user_34,Totally robbed us that was stupid.,RT@user_33
+235,user_35,Yeah such an idiotic call.,RT@user_33
+236,user_36,Worst refereeing ever.,RT@user_33
+237,user_37,Complete idiot ruined the game.,RT@user_33
+238,user_38,Had the best vacation ever!,
+239,user_39,Your opinion is worthless and stupid.,
+240,user_40,Seriously why even bother commenting.,RT@user_39
+241,user_41,Such an idiotic take.,RT@user_39
+242,user_42,Completely worthless opinion.,RT@user_39
+243,user_43,Yeah totally stupid.,RT@user_39
+244,user_44,People like you are the worst.,
+245,user_45,Such a toxic and hateful comment.,RT@user_44
+246,user_46,Agreed absolutely terrible person.,RT@user_44
+247,user_47,Yeah the worst kind of people.,RT@user_44
+248,user_48,So hateful and toxic.,RT@user_44
+249,user_49,Can't stand people like this.,RT@user_44
+250,user_50,Watching the sunset from my balcony.,
+251,user_51,This update ruined everything pathetic.,
+252,user_52,Totally agree they messed it up.,RT@user_51
+253,user_53,Yeah completely ruined it.,RT@user_51
+254,user_54,Such a pathetic update.,RT@user_51
+255,user_55,Worst update ever.,RT@user_51
+256,user_56,They destroyed it completely.,RT@user_51
+257,user_57,Absolute garbage update.,RT@user_51
+258,user_58,So true ruined everything.,RT@user_51
+259,user_59,Learning something new every day.,
+260,user_60,You're an absolute moron honestly.,
+261,user_61,Can't stand idiots like this.,RT@user_60
+262,user_62,Such a complete moron.,RT@user_60
+263,user_63,Yeah absolute idiot.,RT@user_60
+264,user_64,Seriously so stupid.,RT@user_60
+265,user_65,Total moron behavior.,RT@user_60
+266,user_66,Can't believe this stupidity.,RT@user_60
+267,user_67,What a dumb moron.,RT@user_60
+268,user_68,Absolutely idiotic person.,RT@user_60
+269,user_69,So true complete moron.,RT@user_60
+270,user_70,Making progress on my goals.,
+271,user_71,This policy is absolute garbage.,
+272,user_72,Totally useless and pathetic.,RT@user_71
+273,user_73,Yeah complete trash policy.,RT@user_71
+274,user_74,Absolute garbage decision.,RT@user_71
+275,user_75,So useless and pathetic.,RT@user_71
+276,user_76,Worst policy ever made.,RT@user_71
+277,user_77,Beautiful day for a bike ride.,
+278,user_78,Just got promoted at work!,
+279,user_79,Congratulations that's amazing!,RT@user_78
+280,user_80,Your post is dumb and ignorant.,
+281,user_81,Seriously so stupid.,RT@user_80
+282,user_82,Yeah completely ignorant.,RT@user_80
+283,user_83,Such a dumb post.,RT@user_80
+284,user_84,Total idiot take.,RT@user_80
+285,user_85,Trying meditation for the first time.,
+286,user_86,This service is pathetic garbage.,
+287,user_87,Absolutely useless support team.,RT@user_86
+288,user_88,Yeah total garbage service.,RT@user_86
+289,user_89,So pathetic and useless.,RT@user_86
+290,user_90,Worst service experience ever.,RT@user_86
+291,user_91,Complete trash support.,RT@user_86
+292,user_92,Celebrating a friend's birthday today.,
+293,user_93,What a terrible and stupid idea.,
+294,user_94,Yeah complete waste.,RT@user_93
+295,user_95,Such an idiotic idea.,RT@user_93
+296,user_96,Totally stupid decision.,RT@user_93
+297,user_97,Relaxing with some music.,
+298,user_98,This product is trash quality.,
+299,user_99,Totally agree pathetic.,RT@user_98
+300,user_100,Yeah complete trash.,RT@user_98
