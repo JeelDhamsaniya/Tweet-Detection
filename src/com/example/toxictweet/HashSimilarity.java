@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Detects similar tweets using string hashing (Jaccard similarity of character sets).
+ * Detects similar tweets using Jaccard similarity on word sets.
+ * Improved to use word-level comparison instead of character-level.
  */
 public class HashSimilarity {
 
@@ -17,24 +18,34 @@ public class HashSimilarity {
     }
 
     /**
-     * Calculates the Jaccard similarity between two strings.
+     * Calculates the Jaccard similarity between two strings based on word sets.
      * Jaccard Index = |Intersection| / |Union|
+     * Improved: Uses words instead of characters for better accuracy.
      */
     private double calculateSimilarity(String s1, String s2) {
-        Set<Character> set1 = new HashSet<>();
-        for (char c : s1.toCharArray()) {
-            set1.add(c);
+        // Split into words and create sets
+        Set<String> set1 = new HashSet<>();
+        String[] words1 = s1.split("\\s+");
+        for (String word : words1) {
+            if (!word.isEmpty()) {
+                set1.add(word);
+            }
         }
 
-        Set<Character> set2 = new HashSet<>();
-        for (char c : s2.toCharArray()) {
-            set2.add(c);
+        Set<String> set2 = new HashSet<>();
+        String[] words2 = s2.split("\\s+");
+        for (String word : words2) {
+            if (!word.isEmpty()) {
+                set2.add(word);
+            }
         }
 
-        Set<Character> intersection = new HashSet<>(set1);
+        // Calculate intersection
+        Set<String> intersection = new HashSet<>(set1);
         intersection.retainAll(set2);
 
-        Set<Character> union = new HashSet<>(set1);
+        // Calculate union
+        Set<String> union = new HashSet<>(set1);
         union.addAll(set2);
 
         if (union.isEmpty()) {
@@ -46,6 +57,7 @@ public class HashSimilarity {
 
     /**
      * Finds groups of similar tweets from a list.
+     * 
      * @param tweets The list of all tweets to compare.
      * @return A list of groups (lists) of similar tweets.
      */
@@ -63,8 +75,7 @@ public class HashSimilarity {
                     if (!visited[j]) {
                         double similarity = calculateSimilarity(
                                 tweets.get(i).getOriginalText().toLowerCase(),
-                                tweets.get(j).getOriginalText().toLowerCase()
-                        );
+                                tweets.get(j).getOriginalText().toLowerCase());
                         if (similarity >= similarityThreshold) {
                             currentGroup.add(tweets.get(j));
                             visited[j] = true;

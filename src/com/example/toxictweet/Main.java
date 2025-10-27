@@ -18,7 +18,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -132,7 +131,7 @@ public class Main extends Application {
                     textFlow.setLineSpacing(1);
 
                     String[] words = item.split("(?<=\\s)|(?=\\s)");
-                    for(String word : words) {
+                    for (String word : words) {
                         Text textNode = new Text(word);
                         textNode.setFont(Font.font("System", 12));
 
@@ -175,11 +174,12 @@ public class Main extends Application {
             }
         });
 
-        tweetTable.getColumns().addAll(idCol, userCol, textCol, toxicCol);
+        tweetTable.getColumns().setAll(idCol, userCol, textCol, toxicCol);
         tweetTable.setItems(tweets);
-        tweetTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tweetTable.setColumnResizePolicy(tc -> true);
         tweetTable.setFixedCellSize(35); // Set compact fixed cell height
     }
+
     /**
      * Loads the list of toxic words from toxic_words.txt.
      */
@@ -205,8 +205,7 @@ public class Main extends Application {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Tweet File");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", "*.txt", "*.csv")
-        );
+                new FileChooser.ExtensionFilter("Text Files", "*.txt", "*.csv"));
         File file = fileChooser.showOpenDialog(owner);
         if (file != null) {
             parseTweetFile(file);
@@ -228,8 +227,7 @@ public class Main extends Application {
                 "105,userE,This is another terrible, awful, hateful game.,RT@userB",
                 "106,userF,I agree with @userB, that game is dumb and stupid.,RT@userB",
                 "107,userG,Let's all be friends.",
-                "108,userH,You should go away and never come back.,RT@userD"
-        );
+                "108,userH,You should go away and never come back.,RT@userD");
 
         for (String line : sampleData) {
             processTweetLine(line);
@@ -237,7 +235,6 @@ public class Main extends Application {
 
         tweetTable.refresh();
     }
-
 
     /**
      * Parses the selected tweet file line by line.
@@ -281,7 +278,6 @@ public class Main extends Application {
             }
         }
     }
-
 
     /**
      * Runs the full analysis pipeline on the loaded tweets.
@@ -357,7 +353,8 @@ public class Main extends Application {
         } else {
             for (int i = 0; i < toxicClusters.size(); i++) {
                 Set<String> cluster = toxicClusters.get(i);
-                // Heuristic: Find a source user (one with no incoming connections within the cluster)
+                // Heuristic: Find a source user (one with no incoming connections within the
+                // cluster)
                 String source = GraphAnalyzer.findSourceUserInCluster(cluster, users);
                 sb.append("Cluster ").append(i + 1).append(":\n");
                 sb.append("  - Source User (Heuristic): ").append(source).append("\n");
